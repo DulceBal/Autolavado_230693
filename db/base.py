@@ -22,6 +22,7 @@ from models.cliente import Cliente
 from models.vehiculo import Vehiculo
 from models.servicio import Servicio
 from models.servicio_vehiculo import ServicioVehiculo
+from models.producto import Producto  
 
 
 # =========================================================
@@ -56,9 +57,9 @@ def drop_db() -> None:
     ⚠️ SOLO usar en entorno de desarrollo.
     """
 
-    logger.warning("Eliminando todas las tablas")
+    logger.warning("⚠️ Eliminando todas las tablas de la base de datos...")
     Base.metadata.drop_all(bind=engine)
-    logger.warning("Tablas eliminadas correctamente.")
+    logger.warning("🗑️ Tablas eliminadas correctamente.")
 
 
 # =========================================================

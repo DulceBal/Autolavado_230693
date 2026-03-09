@@ -87,4 +87,4 @@ class User(Base):
             f"nombre_usuario='{self.nombre_usuario}', "
             f"correo_usuario='{self.correo_usuario}', "
             f"id_rol={self.id_rol})>"
-        )
+        )      

@@ -8,6 +8,14 @@ from pydantic import BaseModel, EmailStr, Field, ConfigDict
 
 
 # =========================================================
+# 🔹 Login
+# =========================================================
+
+class UserLogin(BaseModel):
+    correo_usuario: EmailStr
+    password_usuario: str
+
+# =========================================================
 # 🔹 Base
 # =========================================================
 
@@ -19,7 +27,7 @@ class UserBase(BaseModel):
     nombre_usuario: str = Field(
         ...,
         min_length=2,
-        max_length=100,
+        max_length=72,
         description="Nombre del usuario" 
     )
 
@@ -41,7 +49,7 @@ class UserCreate(UserBase):
     password_usuario: str = Field(
         ...,
         min_length=6,
-        max_length=100,
+        max_length=72,
         description="Contraseña en texto plano (será hasheada en backend)"
     )
 
@@ -73,7 +81,7 @@ class UserUpdate(BaseModel):
     password_usuario: Optional[str] = Field(
         default=None,
         min_length=6,
-        max_length=100
+        max_length=72
     )
 
     activo: Optional[bool] = None

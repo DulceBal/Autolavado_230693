@@ -21,10 +21,6 @@ from sqlalchemy.orm import relationship
 from models.base import Base
 
 
-# =========================================================
-# 🔹 ENUM DE ESTADOS
-# =========================================================
-
 class EstadoSolicitud(PyEnum):
     """Posibles estados para una solicitud de servicio."""
     PROGRAMADA = "Programada"
@@ -33,39 +29,19 @@ class EstadoSolicitud(PyEnum):
     CANCELADA = "Cancelada"
 
 
-# pylint: disable=too-few-public-methods
 class ServicioVehiculo(Base):
     """
     Registro de servicios aplicados a los vehículos.
-    Representa una orden o venta dentro del sistema.
-
-    Atributos:
-        id_servicio_vehiculo (int): ID único del registro.
-        id_vehiculo (int): FK hacia el vehículo.
-        id_servicio (int): FK hacia el servicio.
-        fecha (date | None): Fecha programada del servicio.
-        hora (time | None): Hora programada del servicio.
-        estatus (EstadoSolicitud): Estado del servicio.
-        estatus_servicio_vehiculo (bool): Soft delete / activo.
-        fecha_registro (datetime): Fecha de creación del registro.
-        fecha_actualizacion (datetime): Fecha de última actualización.
-        fecha_servicio (datetime): Fecha efectiva de realización del servicio.
-        vehiculo (Vehiculo): Relación con Vehiculo.
-        servicio (Servicio): Relación con Servicio.
+    Incluye cajero y operativo que son usuarios del sistema.
     """
 
     __tablename__ = "servicio_vehiculo"
 
     # =========================================================
-    # 🔹 Columnas principales
+    # Columnas principales
     # =========================================================
 
-    id_servicio_vehiculo = Column(
-        Integer,
-        primary_key=True,
-        autoincrement=True,
-        index=True
-    )
+    id_servicio_vehiculo = Column(Integer, primary_key=True, autoincrement=True, index=True)
 
     id_vehiculo = Column(
         Integer,
@@ -81,6 +57,22 @@ class ServicioVehiculo(Base):
         index=True
     )
 
+    # Usuario que registra la orden (cajero)
+    id_cajero = Column(
+        Integer,
+        ForeignKey("users.id_usuario", ondelete="RESTRICT"),
+        nullable=False,
+        index=True
+    )
+
+    # Usuario que realiza el servicio (operativo)
+    id_operativo = Column(
+        Integer,
+        ForeignKey("users.id_usuario", ondelete="RESTRICT"),
+        nullable=False,
+        index=True
+    )
+
     fecha = Column(Date, nullable=True)
     hora = Column(Time, nullable=True)
 
@@ -90,13 +82,10 @@ class ServicioVehiculo(Base):
         server_default=EstadoSolicitud.PROGRAMADA.value
     )
 
-    estatus_servicio_vehiculo = Column(
-        Boolean,
-        default=True
-    )
+    estatus_servicio_vehiculo = Column(Boolean, default=True)
 
     # =========================================================
-    # 🔹 Auditoría
+    # Auditoría
     # =========================================================
 
     fecha_registro = Column(
@@ -118,30 +107,21 @@ class ServicioVehiculo(Base):
     )
 
     # =========================================================
-    # 🔹 Relaciones
+    # Relaciones
     # =========================================================
 
-    vehiculo = relationship(
-        "Vehiculo",
-        back_populates="servicios"
-    )
-
-    servicio = relationship(
-        "Servicio",
-        back_populates="vehiculos"
-    )
-
-    # =========================================================
-    # 🔹 Representación
-    # =========================================================
+    vehiculo = relationship("Vehiculo", back_populates="servicios")
+    servicio = relationship("Servicio", back_populates="vehiculos")
+    cajero   = relationship("User", foreign_keys=[id_cajero])
+    operativo = relationship("User", foreign_keys=[id_operativo])
 
     def __repr__(self) -> str:
-        """
-        Representación en string del registro de servicio.
-        """
         return (
             f"<ServicioVehiculo(id={self.id_servicio_vehiculo}, "
             f"vehiculo_id={self.id_vehiculo}, "
             f"servicio_id={self.id_servicio}, "
+            f"cajero_id={self.id_cajero}, "
+            f"operativo_id={self.id_operativo}, "
             f"estatus='{self.estatus.value}')>"
         )
+        

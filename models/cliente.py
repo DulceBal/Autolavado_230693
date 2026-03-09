@@ -76,6 +76,7 @@ class Cliente(Base):
         back_populates="cliente",
         cascade="all, delete-orphan"
     )
+    
 
     # =========================================================
     # 🔹 Representación

@@ -13,7 +13,7 @@ from schemas.servicio_vehiculo import (
 )
 from crud import crud_servicio_vehiculo as crud_sv
 
-router = APIRouter(prefix="/historial-servicios", tags=["Historial Servicios"])
+router = APIRouter(prefix="/Servicio_vehiculo", tags=["Servicio_vehiculo"])
 
 
 @router.post("/", response_model=ServicioVehiculoRead)

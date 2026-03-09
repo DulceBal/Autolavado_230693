@@ -9,6 +9,10 @@ from sqlalchemy.orm import Session
 from api.deps import get_db
 from schemas.cliente import ClienteCreate, ClienteRead, ClienteUpdate
 from crud import crud_cliente as crud
+crud.create_cliente
+crud.get_clientes
+crud.update_cliente
+crud.delete_cliente
 
 router = APIRouter(prefix="/clientes", tags=["Clientes"])
 

@@ -99,6 +99,8 @@ class Servicio(Base):
         cascade="all, delete-orphan"
     )
 
+    productos = relationship("Producto", back_populates="servicio")
+
     # =========================================================
     # 🔹 Representación
     # =========================================================
@@ -112,3 +114,4 @@ class Servicio(Base):
             f"nombre='{self.nombre_servicio}', "
             f"precio={self.precio})>"
         )
+        
